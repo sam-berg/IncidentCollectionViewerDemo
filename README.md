@@ -69,7 +69,10 @@ Clicking the Offline option switches to use the local tile cache basemap.
 
 ![](https://raw.githubusercontent.com/sam-berg/IncidentCollectionViewerDemo/master/Images/clip_image009.jpg.png)
 
+When offline, the offline locator is used.  The demo is based on Naperville.  Eagle St is a valid street to search for.
 
+
+![](https://raw.githubusercontent.com/sam-berg/IncidentCollectionViewerDemo/master/Images/napervilleaddress.png)
  
 The Add Location tool adds a point to the local editable feature service.  
 
