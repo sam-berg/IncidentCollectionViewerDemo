@@ -88,7 +88,7 @@ The Add Location tool adds a point to the local editable feature service.
       }
 
 
-The submit button applyies the edit to the local feature service.
+The submit button applies the edit to the local feature service.
 
 ![](https://raw.githubusercontent.com/sam-berg/IncidentCollectionViewerDemo/master/Images/clip_image010.jpg)
 
