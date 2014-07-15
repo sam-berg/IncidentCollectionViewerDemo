@@ -15,6 +15,8 @@ using Esri.ArcGISRuntime.Tasks.Geocoding;
 using System.Threading;
 using Esri.ArcGISRuntime.Symbology;
 using System.Windows.Media;
+using System.Windows.Controls.Ribbon;
+using System.Windows.Controls;
 
 namespace ViewerOne
 {
@@ -33,9 +35,26 @@ namespace ViewerOne
     public MainWindow()
     {
       InitializeComponent();
-
+      
     }
 
+
+    private void RibbonGallery_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+      RibbonGalleryItem r = e.NewValue as RibbonGalleryItem;
+      string s = r.Name;
+      string sURL =r.Tag.ToString();
+
+      rsb.Label = s;
+      rsb.SmallImageSource = (r.Content as Image).Source;// r.Tag.ToString();
+      rsb.LargeImageSource = (r.Content as Image).Source;
+      
+
+      //change basemap
+      if (_isOnline)
+        LoadBasemapOnline(sURL);
+
+    }
     private async Task getInputPoint()
     {
 
@@ -147,7 +166,7 @@ namespace ViewerOne
 
       try
       {
-        string sPath = @"..\..\Data\incidents.mpk";
+        string sPath = @"Data\incidents.mpk";
 
         // Create a new local feature service instance and supply an ArcGIS Map Package path as string.
         var localFeatureService = new LocalFeatureService(sPath);// LocalFeatureService.GetServiceAsync(sPath);
@@ -178,7 +197,8 @@ namespace ViewerOne
           {
             await mapView.SetViewAsync((fl.FeatureTable).ServiceInfo.Extent.Expand(1.10));
             pbar.Visibility = System.Windows.Visibility.Hidden;
-    
+
+            rg.SelectedItem = rgc.Items[0];
           }
         }
       }
@@ -192,7 +212,7 @@ namespace ViewerOne
     private async Task LoadOperationalData()
     {
 
-      string sPath = @"..\..\Data\localgovernment.geodatabase";
+      string sPath = @"Data\localgovernment.geodatabase";
       Geodatabase gdb = await Esri.ArcGISRuntime.Data.Geodatabase.OpenAsync(sPath);
 
       Envelope extent = new Envelope();
@@ -235,7 +255,7 @@ namespace ViewerOne
     private void LoadBasemapPackage()
     {
       if (mapView == null) return;
-      var sPath = @"..\..\Data\Basemap.tpk";
+      var sPath = @"Data\Basemap.tpk";
       var b = mapView.Map.Layers["BASEMAP"];
       if (b != null) mapView.Map.Layers.Remove(b);
 
@@ -250,13 +270,30 @@ namespace ViewerOne
 
       LoadBasemapOnline();
 
-      var task2 = LoadEditableData();
+      var task2 =  LoadEditableData();
+      
       var task3 = LoadOperationalData();
       SetupLocator();
 
       addressesGraphicsLayer = new GraphicsLayer();     
       this.mapView.Map.Layers.Add(addressesGraphicsLayer);
 
+
+      
+    }
+
+
+    private void LoadBasemapOnline(string sURL)
+    {
+
+      if (mapView == null) return;
+      var b = mapView.Map.Layers["BASEMAP"];
+      if (b != null) mapView.Map.Layers.Remove(b);
+
+
+      var t = new ArcGISTiledMapServiceLayer(new Uri(sURL));
+      t.ID = "BASEMAP";
+      mapView.Map.Layers.Insert(0, t);
 
     }
 
@@ -274,21 +311,21 @@ namespace ViewerOne
 
     }
 
-    private void RadioButton_Checked(object sender, RoutedEventArgs e)
-    {
-      //offline
-      _isOnline = false;
-      LoadBasemapPackage();
-      SetupLocator();
-    }
+    //private void RadioButton_Checked(object sender, RoutedEventArgs e)
+    //{
+    //  //offline
+    //  _isOnline = false;
+    //  LoadBasemapPackage();
+    //  SetupLocator();
+    //}
 
-    private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
-    {
-      //online
-      _isOnline = true;
-      LoadBasemapOnline();
-      SetupLocator();
-    }
+    //private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
+    //{
+    //  //online
+    //  _isOnline = true;
+    //  LoadBasemapOnline();
+    //  SetupLocator();
+    //}
 
     private async Task SetupLocator()
     {
@@ -297,7 +334,7 @@ namespace ViewerOne
         if (!_isOnline)
         {
 
-          _locatorTask = new LocalLocatorTask(@"..\..\Data\StreetName.loc");
+          _locatorTask = new LocalLocatorTask(@"Data\StreetName.loc");
         }
         else
         {
@@ -352,6 +389,30 @@ namespace ViewerOne
         addressesGraphicsLayer.Graphics.Add(graphic);
 
       }
+
+    }
+
+    private void RibbonGallery_SelectionChanged_1(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+
+      string sOnline=(e.NewValue as System.Windows.Controls.Ribbon.RibbonGalleryItem).Tag.ToString();
+      
+      if (sOnline.ToUpper() == "ONLINE") { _isOnline = true; } else { _isOnline = false; };
+      rmbConn.Label = (e.NewValue as System.Windows.Controls.Ribbon.RibbonGalleryItem).Content.ToString();
+
+      if (_isOnline)
+      {
+        RibbonGalleryItem r = rg.SelectedItem as RibbonGalleryItem;
+        string s = r.Name;
+        string sURL = r.Tag.ToString();
+
+        LoadBasemapOnline(sURL);
+      }
+      else
+      {
+        LoadBasemapPackage();
+      }
+      SetupLocator();
 
     }
   }

@@ -4,33 +4,121 @@
         xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
 		Title="Incident Collection (demo)" 
 		Height="350" 
-		Width="700" Icon="RedPushPin.png" WindowState="Maximized">
+		Width="800" Icon="RedPushPin.png" WindowState="Maximized">
+
+
+
+  <Window.Resources>
+
+    <RibbonGroupSizeDefinitionBaseCollection  x:Key="mapGroup">
+      <RibbonGroupSizeDefinition >
+        <RibbonControlSizeDefinition ImageSize="Large"/>
+      </RibbonGroupSizeDefinition>
+    </RibbonGroupSizeDefinitionBaseCollection>
+  </Window.Resources>
+
   <Border BorderBrush="Blue" BorderThickness="5">
+
     <Grid>
-      
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*"/>     
-      <ColumnDefinition Width="240"/>
-    </Grid.ColumnDefinitions>
+
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="240"/>
+      </Grid.ColumnDefinitions>
 
 
-    <Grid>    
-      <Grid.RowDefinitions>
-        <RowDefinition Height="25"/>
-          <RowDefinition Height="40"/>
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="135" />
+          <RowDefinition Height="0"/>
+          <RowDefinition Height="0"/>
           <RowDefinition/>
-      </Grid.RowDefinitions>
+        </Grid.RowDefinitions>
 
-      <Border BorderThickness="2" BorderBrush="Black">
-      <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Background="White" >
 
-          <RadioButton  Margin="5,0,0,0" GroupName="1" Content="Online" IsChecked="True" Checked="RadioButton_Checked_1" />
-        <RadioButton Margin="100,0,0,0" GroupName="1" Content="Offline" Checked="RadioButton_Checked"/>
-      </StackPanel>
-      </Border>
-      
-      <Border Grid.Row="1" BorderThickness="1" BorderBrush="Black">
-          <Grid HorizontalAlignment="Right">
+        <Ribbon x:Name="ribMap"   >
+
+          <Ribbon.ApplicationMenu>
+            <RibbonApplicationMenu Visibility="Collapsed" >
+            </RibbonApplicationMenu>
+          </Ribbon.ApplicationMenu>
+
+          <RibbonTab  Header="Map Tools" KeyTip="H" >
+
+            <!-- basemap  group-->
+            <RibbonGroup GroupSizeDefinitions="{StaticResource mapGroup}"  x:Name="MapGroup" Header="Basemap">
+
+              <RibbonMenuButton  x:Name="rsb" Label="Topo" >
+                <RibbonMenuButton.ControlSizeDefinition>
+                  <RibbonControlSizeDefinition ImageSize="Large"></RibbonControlSizeDefinition>
+                </RibbonMenuButton.ControlSizeDefinition>
+
+                <RibbonGallery x:Name="rg"  
+                           SelectionChanged="RibbonGallery_SelectionChanged">
+
+                  <RibbonGalleryCategory x:Name="rgc" >
+                    <RibbonGalleryItem Name="Topo"  Tag="http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer"    >
+                      <Image Source= "http://arcgis.maps.arcgis.com/sharing/rest/content/items/6e03e8c26aad4b9c92a87c1063ddb0e3/info/thumbnail/topo_map_2.jpg"/>
+                    </RibbonGalleryItem>
+                    <RibbonGalleryItem Name="Imagery" Tag="http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer"   >
+                      <Image Source= "http://arcgis.maps.arcgis.com/sharing/rest/content/items/86de95d4e0244cba80f0fa2c9403a7b2/info/thumbnail/tempimagery.jpg"/>
+                    </RibbonGalleryItem>
+                    <RibbonGalleryItem Name="Streets" Tag="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"  >
+                      <Image Source= "http://arcgis.maps.arcgis.com/sharing/rest/content/items/d8855ee4d3d74413babfb0f41203b168/info/thumbnail/world_street_map.jpg"/>
+                    </RibbonGalleryItem>
+                  </RibbonGalleryCategory>
+
+                </RibbonGallery>
+              </RibbonMenuButton>
+
+
+
+            </RibbonGroup>
+
+            <RibbonGroup Header="Connectivity">
+              <RibbonMenuButton Margin="0,35,0,0" x:Name="rmbConn" VerticalAlignment="Bottom" Label="Online">
+                <RibbonGallery SelectionChanged="RibbonGallery_SelectionChanged_1" >
+                  <RibbonGalleryCategory >
+
+                    <RibbonGalleryItem Content="Online" Tag="ONLINE" ></RibbonGalleryItem>
+                    <RibbonGalleryItem Content="Offline" Tag="OFFLINE" ></RibbonGalleryItem>
+
+                  </RibbonGalleryCategory>
+
+                </RibbonGallery>
+              </RibbonMenuButton>
+            </RibbonGroup>
+
+            <RibbonGroup Header="Search" Width="350" VerticalContentAlignment="Bottom" >
+              <Grid Margin="0,30,0,0" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="50"/>
+                  <ColumnDefinition/>
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock VerticalAlignment="Center" TextAlignment="Right" Text="Find: " Margin="5,0,5,0"/>
+                <TextBox Width="150" Height="25" x:Name="txtSearch" KeyUp="txtSearch_KeyUp" Background="AliceBlue" Grid.ColumnSpan="3" Margin="45,1,109.8,1.2"/>
+                <Button Grid.Column="2" Content="Search" Margin="30,1,20,1" Click="FindButton_Click"
+                        HorizontalAlignment="Center" Width="80" Height="25" />
+              </Grid>
+            </RibbonGroup>
+          </RibbonTab>
+        </Ribbon>
+
+
+        <Border Grid.Row="1" BorderThickness="2" BorderBrush="Black">
+          <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Background="White" >
+
+            <!--<RadioButton  Margin="5,0,0,0" GroupName="1" Content="Online" IsChecked="True" Checked="RadioButton_Checked_1" />
+          <RadioButton Margin="100,0,0,0" GroupName="1" Content="Offline" Checked="RadioButton_Checked"/>-->
+
+          </StackPanel>
+        </Border>
+
+
+
+        <Border Grid.Row="2" BorderThickness="1" BorderBrush="Black">
+          <!--<Grid HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="70"/>
               <ColumnDefinition/>
@@ -40,18 +128,18 @@
             <TextBox Width="150" Height="25" Grid.Column="1" x:Name="txtSearch" KeyUp="txtSearch_KeyUp" Background="AliceBlue"/>
             <Button Grid.Column="2" Content="Search" Margin="10,1,20,1" Click="FindButton_Click"
                         HorizontalAlignment="Center" Width="80" Height="25" />
-          </Grid>
+          </Grid>-->
         </Border>
-      
-      <Border Grid.Row="2" BorderThickness="1" BorderBrush="Black">
-        <Grid >
+
+        <Border Grid.Row="3" BorderThickness="1" BorderBrush="Black">
+          <Grid >
             <esri:MapView  Initialized="mapView_Initialized" x:Name="mapView" MouseMove="mapView_MouseMove">
 
 
-            <esri:Map>
+              <esri:Map>
 
-            </esri:Map>
-          </esri:MapView>
+              </esri:Map>
+            </esri:MapView>
 
             <Border x:Name="mapTip" Background="White" BorderBrush="Black" BorderThickness="2" Padding="4"
                 HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden">
@@ -61,40 +149,41 @@
 
               <StackPanel>
                 <TextBlock Text="{Binding Attributes[IncidentName]}" FontWeight="Bold" />
-                </StackPanel>
+              </StackPanel>
             </Border>
 
-          
-        </Grid>
+
+          </Grid>
+        </Border>
+      </Grid>
+
+      <ProgressBar  x:Name="pbar"  Height="25" Width="100" IsIndeterminate="True" />
+
+      <Border Grid.Column="1"  BorderThickness="1" BorderBrush="Black" >
+
+        <StackPanel  Orientation="Vertical" Margin="5" Background="White" >
+
+          <StackPanel.Effect>
+            <DropShadowEffect BlurRadius="10" ShadowDepth="10"/>
+          </StackPanel.Effect>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="75"/>
+              <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Button  HorizontalAlignment="Left" Margin="5,0,0,0" x:Name="btnAddLocation" Width="55" Height="35" Click="AddLocation_Click">
+              <Image Source="RedPushPin.png" />
+            </Button>
+            <TextBlock HorizontalAlignment="Left" Text="Add Location..." Grid.Column="1" VerticalAlignment="Center" FontWeight="Bold"/>
+          </Grid>
+          <StackPanel  Orientation="Horizontal">
+            <TextBlock Margin="3" Text="Description:"/>
+            <TextBox Margin="3"  x:Name="txtName" Width="126" />
+          </StackPanel>
+          <Button Margin="10" Content="Submit..." Width="75" Click="DoSubmit"/>
+        </StackPanel>
       </Border>
     </Grid>
 
-    <ProgressBar  x:Name="pbar"  Height="25" Width="100" IsIndeterminate="True" />
-
-    <Border Grid.Column="1"  BorderThickness="1" BorderBrush="Black" >
-      
-    <StackPanel  Orientation="Vertical" Margin="5" Background="White" >
-      
-      <StackPanel.Effect>
-        <DropShadowEffect BlurRadius="10" ShadowDepth="10"/>
-      </StackPanel.Effect>
-      <Grid>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="75"/>
-          <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-      <Button  HorizontalAlignment="Left" Margin="5,0,0,0" x:Name="btnAddLocation" Width="55" Height="35" Click="AddLocation_Click">
-        <Image Source="RedPushPin.png" />
-      </Button>
-        <TextBlock HorizontalAlignment="Left" Text="Add Location..." Grid.Column="1" VerticalAlignment="Center" FontWeight="Bold"/>
-      </Grid>
-      <StackPanel  Orientation="Horizontal">
-        <TextBlock Margin="3" Text="Description:"/>
-        <TextBox Margin="3"  x:Name="txtName" Width="126" />
-      </StackPanel>
-      <Button Margin="10" Content="Submit..." Width="75" Click="DoSubmit"/>
-    </StackPanel>
-    </Border>
-  </Grid>
   </Border>
 </Window>
