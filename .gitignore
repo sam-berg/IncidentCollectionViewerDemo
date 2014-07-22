@@ -1,0 +1,23 @@
+*.deploy
+ArcGISRuntime10.2.3
+ArcGISRuntime10.2.3 - Copy
+clickoncepublish
+obj
+pub
+MyIncidents.gdb
+*.dll
+*.exe
+*.pdb
+*.xml
+*.manifest
+*.user
+*.suo
+IncidentCollectionViewerDemo_v1.2.zip
+Images/BOS2PHL.png
+*.application
+*.pfx
+Properties/AssemblyInfo.cs
+Properties/Resources.Designer.cs
+Properties/Resources.resx
+Properties/Settings.Designer.cs
+Properties/Settings.settings

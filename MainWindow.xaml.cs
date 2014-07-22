@@ -55,6 +55,7 @@ namespace ViewerOne
         LoadBasemapOnline(sURL);
 
     }
+   
     private async Task getInputPoint()
     {
 
@@ -273,13 +274,22 @@ namespace ViewerOne
       var task2 =  LoadEditableData();
       
       var task3 = LoadOperationalData();
+
       SetupLocator();
 
       addressesGraphicsLayer = new GraphicsLayer();     
       this.mapView.Map.Layers.Add(addressesGraphicsLayer);
 
+      this.mapView.MouseUp += mapView_MouseUp;
 
       
+    }
+
+    void mapView_MouseUp(object sender, MouseButtonEventArgs e)
+    {
+      
+      //add temp point
+
     }
 
 

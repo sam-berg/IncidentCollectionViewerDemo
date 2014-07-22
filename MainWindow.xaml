@@ -100,6 +100,7 @@
                 <TextBox Width="150" Height="25" x:Name="txtSearch" KeyUp="txtSearch_KeyUp" Background="AliceBlue" Grid.ColumnSpan="3" Margin="45,1,109.8,1.2"/>
                 <Button Grid.Column="2" Content="Search" Margin="30,1,20,1" Click="FindButton_Click"
                         HorizontalAlignment="Center" Width="80" Height="25" />
+             
               </Grid>
             </RibbonGroup>
           </RibbonTab>
