@@ -5,6 +5,9 @@ ArcGIS Runtime SDK for .NET Offline Editing Example
 
 ArcGIS Runtime SDK for .NET 10.2.3 can use the new runtime geodatabase for offline editing but it needs as its parent a feature service.  This sample uses a service-less methodology by starting with a map package exported from ArcGIS for the editable "LocalFeatureService" (Incidents).
 
+Update:
+This approach does not use the Runtime LOCALSERVER option to wrap a map package from ArcMap and just uses the map to draw temporary graphics.  I cleaned up the UI also.  But at the same time I added another little piece for fun using what the File Geodatabase API (unrelated to the Runtime) to persist and load the features in the app.  You could do the same thing using custom XML or CSV for sure but this is kind of nice because you can access the file geodatabase independently of the app.
+
 ![](https://raw.githubusercontent.com/sam-berg/IncidentCollectionViewerDemo/master/Images/newscreen.png)
 
 ![](https://raw.githubusercontent.com/sam-berg/IncidentCollectionViewerDemo/master/Images/clip_image002.jpg)
