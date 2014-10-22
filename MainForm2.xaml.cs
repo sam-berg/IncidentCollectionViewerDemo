@@ -58,7 +58,8 @@ namespace ViewerOne
   /// </summary>
   public partial class MainForm2 : Window
   {
-    GeodatabaseFeatureServiceTable gdbFeatureServiceTable = null;
+    //GeodatabaseFeatureServiceTable gdbFeatureServiceTable = null;
+
     FeatureLayer fl = null;
     private bool _isOnline = true;
     LocatorTask _locatorTask;
@@ -166,7 +167,9 @@ namespace ViewerOne
       string sPath = @"Data\localgovernment.geodatabase";
       Esri.ArcGISRuntime.Data.Geodatabase gdb = await Esri.ArcGISRuntime.Data.Geodatabase.OpenAsync(sPath);
 
-      Esri.ArcGISRuntime.Geometry.Envelope extent = new Esri.ArcGISRuntime.Geometry.Envelope();
+      Esri.ArcGISRuntime.Geometry.Envelope extent = null;// new Esri.ArcGISRuntime.Geometry.Envelope();
+     //SBTEST 10.2.4 Esri.ArcGISRuntime.Geometry.Envelope extent = new Esri.ArcGISRuntime.Geometry.Envelope();
+     
       foreach (var table in gdb.FeatureTables)
       {
 
@@ -201,8 +204,10 @@ namespace ViewerOne
     {
 
       //40,43,-89,-86
-      Esri.ArcGISRuntime.Geometry.Envelope env = new Esri.ArcGISRuntime.Geometry.Envelope(-89, 40, -86, 43);
-      env.SpatialReference = new SpatialReference(4326);
+      //SBTEST 10.2.4 Esri.ArcGISRuntime.Geometry.Envelope env = new Esri.ArcGISRuntime.Geometry.Envelope(-89, 40, -86, 43);
+      Esri.ArcGISRuntime.Geometry.Envelope env = new Esri.ArcGISRuntime.Geometry.Envelope(-89, 40, -86, 43, new SpatialReference(4326));
+      //SBTEST 10.2.4 env.SpatialReference = new SpatialReference(4326);
+
       Esri.ArcGISRuntime.Geometry.Envelope env2= Esri.ArcGISRuntime.Geometry.GeometryEngine.Project(env, new SpatialReference(102100)) as Esri.ArcGISRuntime.Geometry.Envelope;
 
       mapView.SetView(env2);
@@ -441,8 +446,10 @@ namespace ViewerOne
         mapView.SetView(result.Extent);
         mapView.ZoomToScaleAsync(10000, new TimeSpan(0, 0, 1));
 
-        MapPoint mapPoint = result.Location;
-        mapPoint.SpatialReference = this.mapView.SpatialReference;
+        //SBTEST 10.2.4 MapPoint mapPoint =  result.Location;
+        //SBTEST 10.2.4 mapPoint.SpatialReference = this.mapView.SpatialReference;
+        MapPoint mapPoint = new MapPoint(  result.Location.X,result.Location.Y,this.mapView.SpatialReference);
+     
         MapPoint ll = Esri.ArcGISRuntime.Geometry.GeometryEngine.Project(mapPoint, new SpatialReference(4326)) as MapPoint;
         m_currentLL = ll;
 
