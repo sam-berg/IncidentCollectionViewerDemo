@@ -3,7 +3,7 @@ IncidentCollectionViewerDemo
 
 ArcGIS Runtime SDK for .NET Offline Editing Example
 
-ArcGIS Runtime SDK for .NET 10.2.3 can use the new runtime geodatabase for offline editing but it needs as its parent a feature service.  This sample uses a service-less methodology by starting with a map package exported from ArcGIS for the editable "LocalFeatureService" (Incidents).
+ArcGIS Runtime SDK for .NET 10.2.4 can use the new runtime geodatabase for offline editing but it needs as its parent a feature service.  This sample uses a service-less methodology by starting with a map package exported from ArcGIS for the editable "LocalFeatureService" (Incidents).
 
 Update:
 This approach does not use the Runtime LOCALSERVER option to wrap a map package from ArcMap and just uses the map to draw temporary graphics.  I cleaned up the UI also.  But at the same time I added another little piece for fun using the File Geodatabase API (unrelated to the Runtime) to persist and load the features in the app.  You could do the same thing using custom XML or CSV for sure but this is kind of nice because you can access the file geodatabase independently of the app.
@@ -14,32 +14,6 @@ This approach does not use the Runtime LOCALSERVER option to wrap a map package 
  
 
 
-       string sPath = @"..\..\Data\incidents.mpk";
-
-        // Create a new local feature service instance and supply an ArcGIS Map Package path as string.
-        var localFeatureService = new LocalFeatureService(sPath);// LocalFeatureService.GetServiceAsync(sPath);
-        
-        await localFeatureService.StartAsync();
-        if (localFeatureService != null)
-        {
-
-
-          Esri.ArcGISRuntime.Tasks.Query.OutFields oof = new Esri.ArcGISRuntime.Tasks.Query.OutFields();
-          oof.Add("OBJECTID");
-          oof.Add("Comments");
-          oof.Add("IncidentName");
-
-          gdbFeatureServiceTable = new GeodatabaseFeatureServiceTable()
-          {
-            ServiceUri = localFeatureService.UrlFeatureService + "/0",
-            OutFields = oof
-          };
-
-          await gdbFeatureServiceTable.InitializeAsync();
-
-          fl = new FeatureLayer(gdbFeatureServiceTable) { ID = "featureLayer" };
-
-          mapView.Map.Layers.Add(fl);
 
 
 A read-only "Operational Layer" (counties) is added by using the runtime geodatabase option generated from the File | Share As | Runtime Content command.  
@@ -81,19 +55,6 @@ When offline, the offline locator is used.  The demo is based on Naperville.  Ea
  
 The Add Location tool adds a point to the local editable feature service.  
 
-      var mapPoint = await this.mapView.Editor.RequestPointAsync();
-      this.mapView.Cursor = Cursors.Arrow;
-
-      var newFeature = new Esri.ArcGISRuntime.Data.GeodatabaseFeature(this.gdbFeatureServiceTable.Schema);
-      newFeature.Geometry = mapPoint;
-      newFeature.Attributes["IncidentName"] = "Default";
-      newFeature.Attributes["Comments"] = "Default";
-      if (this.txtName.Text != null && this.txtName.Text.Length > 0) newFeature.Attributes["IncidentName"] = this.txtName.Text;
-
-      try
-      {
-        recNo = await this.gdbFeatureServiceTable.AddAsync(newFeature);
-      }
 
 
 The submit button applies the edit to the local feature service.
